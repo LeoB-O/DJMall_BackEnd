@@ -1,18 +1,31 @@
 const User = require('../models/User');
-// const jwt = require('jwt-express');
+const util = require('../util/util');
 
 module.exports = {
     login: function (req, res, next) {
-        let username = req.body.username;
+        console.log(!util.reqShouldContain(['email', 'password'])(req));
+        // req should contain username and password
+        if (!util.reqShouldContain(['username', 'password'])(req)
+            && !util.reqShouldContain(['email', 'password'])(req)) {
+            util.handleResponse(res, 'Missing credentials', null);
+        }
+
+        let username = req.body.username || req.body.email;
         let password = req.body.password;
-        User.findOne({username: username}, function (err, user) {
-            if(user.validPassword(password)) {
+
+        // find user according to username
+        User.findOne().or([{username: username}, {email: username}]).exec(function (err, user) {
+            if (err) util.handleResponse(res, err, null);
+
+            if (!user) util.handleResponse(res, 'No such user', null);
+
+            if (user.validPassword(password)) {
                 let jwt = res.jwt({
                     username: user.username,
                     permission: user.permission,
                 });
                 res.send(jwt.token);
             }
-        });
+        })
     }
 };
