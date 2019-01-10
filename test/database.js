@@ -2,7 +2,7 @@ const rest = require('restler');
 const assert = require('chai').assert;
 const User = require('../models/User');
 const mongoose = require('mongoose');
-const credentials = require('../credentials')
+const credentials = require('../credentials');
 
 suite('Database test', function () {
     // connect to database

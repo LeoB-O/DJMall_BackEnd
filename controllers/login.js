@@ -3,7 +3,6 @@ const util = require('../util/util');
 
 module.exports = {
     login: function (req, res, next) {
-        console.log(!util.reqShouldContain(['email', 'password'])(req));
         // req should contain username and password
         if (!util.reqShouldContain(['username', 'password'])(req)
             && !util.reqShouldContain(['email', 'password'])(req)) {
@@ -24,7 +23,7 @@ module.exports = {
                     username: user.username,
                     permission: user.permission,
                 });
-                res.send(jwt.token);
+                util.handleResponse(res, null, jwt.token);
             }
         })
     }
