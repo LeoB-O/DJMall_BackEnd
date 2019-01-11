@@ -5,6 +5,7 @@ const signup =require('../controllers/signup');
 const personalinfo =require('../controllers/personalinfo');
 const good = require('../controllers/good');
 const store = require('../controllers/store');
+const info = require('../controllers/information');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -34,5 +35,7 @@ router.get('/good', good.getGoodById);
 router.get('/store', store.getById);
 
 router.get('/stores', store.getAll);
+
+router.get('/indexImages',info.getIndexImage);
 
 module.exports = router;
