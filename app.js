@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const jwt = require('jwt-express');
+const cors = require('cors');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(jwt.init(credentials.jwt.development.secret, credentials.jwt.development.options));
+app.use(cors());
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
