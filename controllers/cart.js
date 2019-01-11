@@ -29,7 +29,7 @@ module.exports = {
             return;
         }
         if (!cart) {
-            Cart.create({
+            await Cart.create({
                 userId: userId,
                 contents: [{
                     id: good._id,
@@ -49,6 +49,7 @@ module.exports = {
                 imgUrl: good.images[0] || null,
                 typeArgs: options
             });
+            await cart.save();
         }
 
         util.handleResponse(res, null, {});

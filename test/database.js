@@ -5,6 +5,7 @@ const Order=require('../models/Order')
 const Good = require('../models/Good');
 const Cart = require('../models/Cart');
 const Category = require('../models/Category');
+const Merchant = require('../models/Merchant');
 const mongoose = require('mongoose');
 const credentials = require('../credentials');
 const Mock = require('mockjs');
@@ -46,7 +47,7 @@ suite('Database test', function () {
         Order.deleteMany({},function (err,raw) {
             assert(err==null)
           })
-          
+
           Order.create({
 
           })
@@ -78,25 +79,104 @@ suite('Database test', function () {
         });
     });
 
-    //TODO
-    test('should be able to add cart.', async function (done) {
+    test('should be able to add cart.', async function () {
         let user = await User.findOne({username: 'admin'});
         let cart = await Cart.findOne({userId: user._id});
+        let good = await Good.findOne({});
 
         if (!cart) {
+            let raw = await Cart.create({
+                userId: user._id,
+                contents: [{
+                    id: good._id,
+                    name: good.name,
+                    amount: Random.natural(1, 10),
+                    imgUrl: good.images[0],
+                    typeArgs: [{
+                        attrName: good.options[0].name,
+                        attrValue: good.options[0].values[0]
+                    }]
+                }]
+            });
+            try {
+                assert(raw);
+                return new Promise(function (resolve, reject) {
+                    resolve();
+                });
+            } catch (e) {
+                return new Promise(function (resolve, reject) {
+                    reject(e);
+                });
+            }
+        } else {
+            cart.contents.push({
+                id: good._id,
+                name: good.name,
+                amount: Random.natural(1, 10),
+                imgUrl: good.images[0],
+                typeArgs: [{
+                    attrName: good.options[0].name,
+                    attrValue: good.options[0].values[0]
+                }]
+            });
+            let raw = await cart.save();
 
+            try {
+                assert(raw);
+                return new Promise(function (resolve, reject) {
+                    resolve();
+                });
+            } catch (e) {
+                return new Promise(function (resolve, reject) {
+                    reject(e);
+                });
+            }
         }
     });
 
-    //TODO
-    test('should be able to add category.', function (done) {
+    test('should be able to add category.', async function () {
+        let raw = await Category.create({
+            cateName: Random.string(3, 10),
+            subCate: [Random.string(3, 10), Random.string(3, 10)]
+        });
 
+        try {
+            assert(raw);
+            return new Promise(function (resolve, reject) {
+                resolve();
+            });
+        } catch (e) {
+            return new Promise(function (resolve, reject) {
+                reject(e);
+            });
+        }
     });
 
-    //TODO
-    test('should be able to add merchant', function (done) {
+    test('should be able to add merchant', async function () {
+        let good = await Good.findOne({});
 
+        let raw = await Merchant.create({
+            name: Random.word(3, 10),
+            category: [{
+                name: Random.word(3, 10),
+                subCate: [{
+                    name: Random.word(3,10),
+                    goodIds: [good._id]
+                }]
+            }]
+        });
+
+        try {
+            assert(raw);
+            return new Promise(function (resolve, reject) {
+                resolve();
+            });
+        } catch (e) {
+            return new Promise(function (resolve, reject) {
+                reject(e);
+            });
+        }
     });
 });
-   
+
 
