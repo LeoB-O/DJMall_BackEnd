@@ -4,7 +4,6 @@ const Order = require('../models/Order');
 const Good = require('../models/Good')
 module.exports = {
     getinfo: function (req, res, next) {
-
         let id = req.query.ID
         console.log(id)
         User.findOne({
@@ -27,40 +26,34 @@ module.exports = {
             }
         })
     },
-    getorder: function (req, res, next) {
+    getorder: async function (req, res, next) {
         let id = req.query.ID
-
-        User.findOne({
+        let user = await User.findOne({
             _id: id
-        }, function (err, user) {
-            let orderid = user.orderId
-            let content = new Array(user.orderId.length)
-            for (let oid in orderid) {
-
-                let price = 0
-                Order.findOne({
-                    userId: oid
-                }, function (err, order) {
-                    let goods = order.goodIds
-                    for (let gid in goods) {
-                        Good.findOne({
-                            _id: gid
-                        }, function (err, good) {
-                            price += good.price
-                        })
-                    }
-                    content.pop({
-                        id: oid,
-                        price: price,
-                        time: order.createdAt
-                    })
-                })
-            }
-            util.handleResponse(res, err, {
-                content: content
-            })
         })
-
+        let orderid = user.orderId
+        let content = new Array()
+        for (let oid of orderid) {
+            let price = 0
+            let order = await Order.findOne({
+                _id: oid
+            })
+            let goods = order.goodIds
+            for (let gid of goods) {
+                let good = await Good.findOne({
+                    _id: gid
+                })
+                price += good.price
+            }
+            content.push({
+                id: oid,
+                price: price,
+                time: order.createdAt
+            })
+        }
+        util.handleResponse(res, null, {
+            content: content
+        })
     },
     getaddress: function (req, res, next) {
         let id = req.query.ID
@@ -82,10 +75,11 @@ module.exports = {
         let newemail = req.body.email
         let oldusername = req.body.oldusername
 
+        console.log(newusername)
         User.findOne().or([{
-            username: username
+            username: newusername
         }, {
-            email: email
+            email: newemail
         }]).exec(function (err, user) {
             if (user == null) {
                 User.findOneAndUpdate({
