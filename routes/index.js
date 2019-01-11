@@ -38,4 +38,6 @@ router.get('/stores', store.getAll);
 
 router.get('/indexImages',info.getIndexImage);
 
+router.get('/categories', info.getCategories);
+
 module.exports = router;
