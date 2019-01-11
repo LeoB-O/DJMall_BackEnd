@@ -9,6 +9,7 @@ let userSchema = mongoose.Schema({
     orderId: [Schema.Types.ObjectId],
     avatar: String,
     address: [{
+        id:String,
         province: String,
         city: String,
         district: String,

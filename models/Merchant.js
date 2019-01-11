@@ -13,6 +13,6 @@ let merchantSchema = mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 
-let Merchant = mongoose.Model('Merchant', merchantSchema);
+let Merchant = mongoose.model('Merchant', merchantSchema);
 
 module.exports = Merchant;

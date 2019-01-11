@@ -8,6 +8,6 @@ let cartSchema = mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 
-let Cart = mongoose.Model('Cart', cartSchema);
+let Cart = mongoose.model('Cart', cartSchema);
 
 module.exports = Cart;

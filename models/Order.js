@@ -8,5 +8,5 @@ let orderSchema = mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 
-let Order = mongoose.Model('Order', orderSchema);
+let Order = mongoose.model('Order', orderSchema);
 module.exports = Order;
