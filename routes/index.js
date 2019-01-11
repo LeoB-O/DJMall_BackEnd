@@ -4,6 +4,7 @@ const login = require('../controllers/login');
 const signup =require('../controllers/signup');
 const personalinfo =require('../controllers/personalinfo');
 const good = require('../controllers/good');
+const store = require('../controllers/store');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -29,5 +30,9 @@ router.get('/goods/category', good.getGoodsByCate);
 router.get('/goods/store', good.getGoodsByStoreAndCate);
 
 router.get('/good', good.getGoodById);
+
+router.get('/store', store.getById);
+
+router.get('/stores', store.getAll);
 
 module.exports = router;
