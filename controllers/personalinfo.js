@@ -135,9 +135,28 @@ module.exports = {
                 })
             }
         })
-
-
-
+    },
+    deletead:function(req,res,next){
+        let id=req.body.id
+        let username=req.body.username
+        User.findOne({username:username},function(err,user){
+            for(let ad in user.address)
+            {
+                if(user.address[ad]._id==id)
+                {
+                    user.address.splice(ad,1)
+                }
+            }
+            user.save();
+            if(err)
+            {
+                util.handleResponse(res,err,{ok:false})
+            }
+            else
+            {
+                util.handleResponse(res,err,{ok:true})
+            }
+        })
     }
 
 

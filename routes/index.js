@@ -23,4 +23,6 @@ router.post('/editinfo',personalinfo.editinfo)
 
 router.post('/editaddress',personalinfo.editaddress)
 
+router.post('/deleteaddress',personalinfo.deletead)
+
 module.exports = router;
