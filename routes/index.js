@@ -40,4 +40,8 @@ router.get('/indexImages',info.getIndexImage);
 
 router.get('/categories', info.getCategories);
 
+router.post('/editaddress',personalinfo.editaddress);
+
+router.post('/deleteaddress',personalinfo.deletead);
+
 module.exports = router;

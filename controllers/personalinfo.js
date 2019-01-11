@@ -4,7 +4,6 @@ const Order = require('../models/Order');
 const Good = require('../models/Good')
 module.exports = {
     getinfo: function (req, res, next) {
-
         let id = req.query.ID
         console.log(id)
         User.findOne({
@@ -27,40 +26,34 @@ module.exports = {
             }
         })
     },
-    getorder: function (req, res, next) {
+    getorder: async function (req, res, next) {
         let id = req.query.ID
-
-        User.findOne({
+        let user = await User.findOne({
             _id: id
-        }, function (err, user) {
-            let orderid = user.orderId
-            let content = new Array(user.orderId.length)
-            for (let oid in orderid) {
-
-                let price = 0
-                Order.findOne({
-                    userId: oid
-                }, function (err, order) {
-                    let goods = order.goodIds
-                    for (let gid in goods) {
-                        Good.findOne({
-                            _id: gid
-                        }, function (err, good) {
-                            price += good.price
-                        })
-                    }
-                    content.pop({
-                        id: oid,
-                        price: price,
-                        time: order.createdAt
-                    })
-                })
-            }
-            util.handleResponse(res, err, {
-                content: content
-            })
         })
-
+        let orderid = user.orderId
+        let content = new Array()
+        for (let oid of orderid) {
+            let price = 0
+            let order = await Order.findOne({
+                _id: oid
+            })
+            let goods = order.goodIds
+            for (let gid of goods) {
+                let good = await Good.findOne({
+                    _id: gid
+                })
+                price += good.price
+            }
+            content.push({
+                id: oid,
+                price: price,
+                time: order.createdAt
+            })
+        }
+        util.handleResponse(res, null, {
+            content: content
+        })
     },
     getaddress: function (req, res, next) {
         let id = req.query.ID
@@ -74,7 +67,43 @@ module.exports = {
         })
     },
     editaddress: function (req, res, next) {
+        let addressid=req.body.AddressID
+        let uid=req.body.UserID
+        let province=req.body.province
+        let city=req.body.city
+        let district=req.body.district
+        let detail=req.body.detail
+        let name=req.body.name
 
+        User.findOne({
+            _id:uid
+        },function(err,user){
+            let address=user.address
+            for(let ad in address)
+            {
+                if(address[ad]._id==addressid)
+                {
+                    address[ad].province=province
+                    address[ad].city=city
+                    address[ad].district=district
+                    address[ad].detail=detail
+                    address[ad].name=name
+                }
+                
+            }
+            console.log(address)
+            User.findOneAndUpdate({_id:uid},{address:address},function(err){
+                if(err)
+                {
+                    util.handleResponse(res,err,{ok:false})
+                }
+                else
+                {
+                    util.handleResponse(res,err,{ok:true})
+                }
+            })
+
+        })
     },
     editinfo: function (req, res, next) {
         let newusername = req.body.username
@@ -82,10 +111,11 @@ module.exports = {
         let newemail = req.body.email
         let oldusername = req.body.oldusername
 
+        console.log(newusername)
         User.findOne().or([{
-            username: username
+            username: newusername
         }, {
-            email: email
+            email: newemail
         }]).exec(function (err, user) {
             if (user == null) {
                 User.findOneAndUpdate({
@@ -105,9 +135,28 @@ module.exports = {
                 })
             }
         })
-
-
-
+    },
+    deletead:function(req,res,next){
+        let id=req.body.id
+        let username=req.body.username
+        User.findOne({username:username},function(err,user){
+            for(let ad in user.address)
+            {
+                if(user.address[ad]._id==id)
+                {
+                    user.address.splice(ad,1)
+                }
+            }
+            user.save();
+            if(err)
+            {
+                util.handleResponse(res,err,{ok:false})
+            }
+            else
+            {
+                util.handleResponse(res,err,{ok:true})
+            }
+        })
     }
 
 
