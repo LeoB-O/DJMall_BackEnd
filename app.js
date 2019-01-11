@@ -9,6 +9,7 @@ const jwt = require('jwt-express');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const apiRouter = require('./routes/api');
 const credentials = require('./credentials');
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(jwt.init(credentials.jwt.development.secret, credentials.jwt.development
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/api', jwt.active(), apiRouter);
 
 app.use(function(err, req, res, next) {
     if (err.name == 'JWTExpressError') {
