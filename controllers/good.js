@@ -79,7 +79,10 @@ module.exports = {
     },
 
     getGoodById: async function (req, res, next) {
-        util.reqShouldContain(['id']);
+        if (!util.reqShouldContain(['id'])) {
+            util.handleResponse(res, 'Missing good id.', null);
+            return;
+        }
 
         let goodId = req.query.id;
 
