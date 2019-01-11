@@ -2,7 +2,7 @@ module.exports = {
     reqShouldContain: function (params) {
         return function (req) {
             for (let p of params) {
-                if (!req.body[p]) {
+                if (!req.body[p] && !req.query[p]) {
                     return false;
                 }
             }
@@ -42,5 +42,15 @@ module.exports = {
             }
         }
         return ret;
+    },
+
+    findInArray: function (array, key, value) {
+        for (let i of array) {
+            if (i[key]==value) {
+                return i;
+            }
+        }
+
+        return null;
     }
 }
