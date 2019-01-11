@@ -7,6 +7,9 @@ const cart = require('../controllers/cart');
 router.get('/cart', cart.getCart);
 
 // add to cart
-router.post('/cart', cart.addToCart);
+router.put('/cart', cart.addToCart);
+
+// update cart
+router.post('/cart', cart.updateCart);
 
 module.exports = router;

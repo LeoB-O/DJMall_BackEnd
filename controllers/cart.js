@@ -8,6 +8,8 @@ module.exports = {
 
         let cart = await Cart.findById(userId).exec();
 
+        cart = cart || {};
+
         util.handleResponse(res, null, cart);
     },
     addToCart: async function (req, res, next) {
@@ -53,5 +55,30 @@ module.exports = {
         }
 
         util.handleResponse(res, null, {});
+    },
+    updateCart: async function (req, res, next) {
+        if (!util.reqShouldContain(['contents'])) {
+            util.handleResponse(res, 'Missing content', null);
+            return;
+        }
+
+        // cart content
+        let contents = req.body.contents;
+        let userId = req.jwt.payload.userId;
+
+        let cart = await Cart.findOneAndUpdate({
+            userId: userId
+        }, {
+            contents: contents
+        },{
+            new: true
+        });
+
+        console.log(cart);
+
+        if (!cart)
+            util.handleResponse(res, 'No such user.', null);
+        else
+            util.handleResponse(res, null, {})
     }
 };
