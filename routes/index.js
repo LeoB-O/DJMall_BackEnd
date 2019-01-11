@@ -21,4 +21,6 @@ router.get('/getaddress',personalinfo.getaddress)
 
 router.post('/editinfo',personalinfo.editinfo)
 
+router.post('/editaddress',personalinfo.editaddress)
+
 module.exports = router;

@@ -67,7 +67,43 @@ module.exports = {
         })
     },
     editaddress: function (req, res, next) {
+        let addressid=req.body.AddressID
+        let uid=req.body.UserID
+        let province=req.body.province
+        let city=req.body.city
+        let district=req.body.district
+        let detail=req.body.detail
+        let name=req.body.name
 
+        User.findOne({
+            _id:uid
+        },function(err,user){
+            let address=user.address
+            for(let ad in address)
+            {
+                if(address[ad]._id==addressid)
+                {
+                    address[ad].province=province
+                    address[ad].city=city
+                    address[ad].district=district
+                    address[ad].detail=detail
+                    address[ad].name=name
+                }
+                
+            }
+            console.log(address)
+            User.findOneAndUpdate({_id:uid},{address:address},function(err){
+                if(err)
+                {
+                    util.handleResponse(res,err,{ok:false})
+                }
+                else
+                {
+                    util.handleResponse(res,err,{ok:true})
+                }
+            })
+
+        })
     },
     editinfo: function (req, res, next) {
         let newusername = req.body.username
