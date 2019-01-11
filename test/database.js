@@ -2,6 +2,8 @@ const rest = require('restler');
 const assert = require('chai').assert;
 const User = require('../models/User');
 const Good = require('../models/Good');
+const Cart = require('../models/Cart');
+const Category = require('../models/Category');
 const mongoose = require('mongoose');
 const credentials = require('../credentials');
 const Mock = require('mockjs');
@@ -38,12 +40,33 @@ suite('Database test', function () {
             images: [Random.image()],
             pinyin: Random.string(3, 8),
             eName: Random.string(3, 8)
-        }).then(function (err, raw) {
-            assert(err === null);
+        }).then(function (raw) {
+            console.log(raw);
+            assert(raw);
             done();
         }).catch(function (err) {
             console.log(err);
-            done();
+            done(err);
         });
+    });
+
+    //TODO
+    test('should be able to add cart.', async function (done) {
+        let user = await User.findOne({username: 'admin'});
+        let cart = await Cart.findOne({userId: user._id});
+
+        if (!cart) {
+
+        }
+    });
+
+    //TODO
+    test('should be able to add category.', function (done) {
+
+    });
+
+    //TODO
+    test('should be able to add merchant', function (done) {
+
     });
 });
