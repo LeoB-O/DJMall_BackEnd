@@ -20,6 +20,7 @@ module.exports = {
 
             if (user.validPassword(password)) {
                 let jwt = res.jwt({
+                    userId: user._id,
                     username: user.username,
                     permission: user.permission,
                 });

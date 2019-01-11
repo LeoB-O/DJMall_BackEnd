@@ -7,5 +7,5 @@ let categorySchema = mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 
-let Category = mongoose.Model('Category', categorySchema);
+let Category = mongoose.model('Category', categorySchema);
 module.exports = Category;

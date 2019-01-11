@@ -19,5 +19,5 @@ let goodSchema = mongoose.Schema({
     updatedAt: {type: Date, default: Date.now}
 });
 
-let Good = mongoose.Model('Good', goodSchema);
+let Good = mongoose.model('Good', goodSchema);
 module.exports = Good;
