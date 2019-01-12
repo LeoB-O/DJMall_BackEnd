@@ -103,13 +103,14 @@ suite('Database test', function () {
 
     })
     //TODO
-    test('should be able to add cart.', async function (done) {
+    test('should be able to add cart.', async function () {
         let user = await User.findOne({
             username: 'admin'
         });
         let cart = await Cart.findOne({
             userId: user._id
         });
+        let good = await Good.findOne({});
 
         if (!cart) {
             let raw = await Cart.create({
@@ -136,6 +137,7 @@ suite('Database test', function () {
                 });
             }
         } else {
+            console.log('test');
             cart.contents.push({
                 id: good._id,
                 name: good.name,
