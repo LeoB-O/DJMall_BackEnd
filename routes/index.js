@@ -6,7 +6,7 @@ const personalinfo =require('../controllers/personalinfo');
 const good = require('../controllers/good');
 const store = require('../controllers/store');
 const info = require('../controllers/information');
-
+const search=require('../controllers/search')
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
@@ -43,5 +43,7 @@ router.get('/categories', info.getCategories);
 router.post('/editaddress',personalinfo.editaddress);
 
 router.post('/deleteaddress',personalinfo.deletead);
+
+router.post('/search',search.search);
 
 module.exports = router;

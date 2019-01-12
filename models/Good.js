@@ -15,6 +15,7 @@ let goodSchema = mongoose.Schema({
     images: [String],
     pinyin: String,
     eName: String,
+    merchantID:String,
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}
 });
