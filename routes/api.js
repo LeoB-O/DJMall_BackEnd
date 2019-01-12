@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const cart = require('../controllers/cart');
 const user = require('../controllers/user');
+const chat = require('../controllers/chat');
 const personalinfo = require('../controllers/personalinfo');
 
 router.get('/user', user.getUser);
@@ -33,5 +34,11 @@ router.post('/editaddress', personalinfo.editaddress);
 
 // deleteaddress
 router.post('/deleteaddress', personalinfo.deletead);
+
+// getChat
+router.get('/chat', chat.getChat);
+
+// send message
+router.post('/chat', chat.sendMessage);
 
 module.exports = router;
