@@ -3,7 +3,7 @@ const util = require('../util/util');
 
 module.exports={
     search:async function(req,res,next){
-        let searchinput=req.body.searchinput
+        let searchinput=req.query.search
         let query={name: new RegExp(searchinput)}
         let query1={eName: new RegExp(searchinput)}
         let query2={pinyin: new RegExp(searchinput)}

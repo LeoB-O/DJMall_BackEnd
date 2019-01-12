@@ -32,7 +32,7 @@ router.get('/indexImages',info.getIndexImage);
 
 router.get('/categories', info.getCategories);
 
-router.post('/search',search.search);
+router.get('/search',search.search);
 
 router.options('*', (req, res) => {
   res.send();
