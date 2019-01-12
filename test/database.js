@@ -61,6 +61,30 @@ suite('Database test', function () {
         }
     });
 
+    test('should be able to add merchant', async function () {
+        let raw = await Merchant.create({
+            name: Random.word(3, 10),
+            category: [{
+                name: Random.word(3, 10),
+                subCate: [{
+                    name: Random.word(3, 10),
+                    goodIds: []
+                }]
+            }]
+        });
+
+        try {
+            assert(raw);
+            return new Promise(function (resolve, reject) {
+                resolve();
+            });
+        } catch (e) {
+            return new Promise(function (resolve, reject) {
+                reject(e);
+            });
+        }
+    });
+
     test('should be able to create Good.', async function () {
         let category = await Category.findOne();
         let merchant = await Merchant.findOne();
@@ -82,6 +106,9 @@ suite('Database test', function () {
             eName: Random.string(3, 8),
             merchantID: merchant._id
         });
+
+        merchant.category[0].subCate[0].goodIds.push(raw._id);
+        merchant.save();
 
         try {
             assert(raw);
@@ -178,32 +205,6 @@ suite('Database test', function () {
                     reject(e);
                 });
             }
-        }
-    });
-
-    test('should be able to add merchant', async function () {
-        let good = await Good.findOne({});
-
-        let raw = await Merchant.create({
-            name: Random.word(3, 10),
-            category: [{
-                name: Random.word(3, 10),
-                subCate: [{
-                    name: Random.word(3, 10),
-                    goodIds: [good._id]
-                }]
-            }]
-        });
-
-        try {
-            assert(raw);
-            return new Promise(function (resolve, reject) {
-                resolve();
-            });
-        } catch (e) {
-            return new Promise(function (resolve, reject) {
-                reject(e);
-            });
         }
     });
 });

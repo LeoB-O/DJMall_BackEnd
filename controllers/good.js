@@ -62,11 +62,13 @@ module.exports = {
 
         let goods = util.findInArray(merchant.category, 'name', parentCate);
         goods = util.findInArray(goods.subCate, 'name', subCate).goodIds;
+        console.log(goods);
 
         //TODO try to convert to array.map
         let ret = [];
         for (let g of goods) {
             let good = await Good.findById(g);
+            if (!good) continue;
             ret.push({
                 id: good._id,
                 name: good.name,
