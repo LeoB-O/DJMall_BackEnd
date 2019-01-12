@@ -4,8 +4,7 @@ const Order = require('../models/Order');
 const Good = require('../models/Good')
 module.exports = {
     getinfo: function (req, res, next) {
-        let id = req.query.ID
-        console.log(id)
+        let id = req.jwt.payload.userId;
         User.findOne({
             _id: id
         }, function (err, user) {
@@ -19,7 +18,7 @@ module.exports = {
             } else {
                 util.handleResponse(res, err, {
                     username: user.username,
-                    avatar: 'user.avatar',
+                    avatar: user.avatar,
                     email: user.email,
                     password: user.password
                 })
@@ -27,7 +26,7 @@ module.exports = {
         })
     },
     getorder: async function (req, res, next) {
-        let id = req.query.ID
+        let id = req.jwt.payload.userId;
         let user = await User.findOne({
             _id: id
         })
@@ -56,7 +55,7 @@ module.exports = {
         })
     },
     getaddress: function (req, res, next) {
-        let id = req.query.ID
+        let id = req.jwt.payload.userId;
         User.findOne({
             _id: id
         }, function (err, user) {
@@ -68,7 +67,7 @@ module.exports = {
     },
     editaddress: function (req, res, next) {
         let addressid=req.body.AddressID
-        let uid=req.body.UserID
+        let id = req.jwt.payload.userId;
         let province=req.body.province
         let city=req.body.city
         let district=req.body.district
@@ -76,7 +75,6 @@ module.exports = {
         let name=req.body.name
 
         User.findOne({
-            _id:uid
         },function(err,user){
             let address=user.address
             for(let ad in address)
@@ -109,9 +107,8 @@ module.exports = {
         let newusername = req.body.username
         let newpassword = req.body.password
         let newemail = req.body.email
-        let oldusername = req.body.oldusername
+        let oldusername =req.jwt.payload.username
 
-        console.log(newusername)
         User.findOne().or([{
             username: newusername
         }, {
