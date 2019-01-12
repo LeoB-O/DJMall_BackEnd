@@ -16,14 +16,6 @@ router.post('/login', login.login);
 
 router.post('/signup',signup.signup);
 
-router.get('/personalinfo',personalinfo.getinfo);
-
-router.get('/order',personalinfo.getorder);
-
-router.get('/getaddress',personalinfo.getaddress);
-
-router.post('/editinfo',personalinfo.editinfo);
-
 router.get('/goods', good.getGoods);
 
 router.get('/goods/category', good.getGoodsByCate);
@@ -39,10 +31,6 @@ router.get('/stores', store.getAll);
 router.get('/indexImages',info.getIndexImage);
 
 router.get('/categories', info.getCategories);
-
-router.post('/editaddress',personalinfo.editaddress);
-
-router.post('/deleteaddress',personalinfo.deletead);
 
 router.post('/search',search.search);
 
