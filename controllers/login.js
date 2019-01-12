@@ -33,6 +33,9 @@ module.exports = {
                 });
                 util.handleResponse(res, null, jwt.token);
             }
+            else{
+                util.handleResponse(res,'password error',null)
+            }
         })
     }
 };
