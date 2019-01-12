@@ -38,7 +38,7 @@ module.exports = {
                 category: current.category,
                 options: current.options,
                 description: current.description,
-                imgUrls: current.images,
+                imageUrl: current.images[0],
             }
         });
 
@@ -87,6 +87,15 @@ module.exports = {
         let goodId = req.query.id;
 
         let good = await Good.findById(goodId);
+        good = {
+            id: good._id,
+            name: good.name,
+            price: good.price,
+            category: good.category,
+            options: good.options,
+            description: good.description,
+            imgUrls: good.images,
+        };
 
         util.handleResponse(res, null, good);
     }

@@ -44,4 +44,8 @@ router.post('/editaddress',personalinfo.editaddress);
 
 router.post('/deleteaddress',personalinfo.deletead);
 
+router.options('*', (req, res) => {
+  res.send();
+});
+
 module.exports = router;

@@ -45,13 +45,15 @@ suite('Database test', function () {
 
     });
 
-    test('should be able to create Good.', function (done) {
-        Good.create({
+    test('should be able to create Good.', async function () {
+        let category = await Category.findOne();
+
+        let raw = await Good.create({
             name: Random.string(3, 8),
             price: Random.float(1, 100),
             category: {
-                parentCate: Random.string(3, 8),
-                subCate: Random.string(3, 8)
+                parentCate: category.cateName,
+                subCate: category.subCate[0]
             },
             options: [{
                 name: Random.string(3, 8),
@@ -61,14 +63,18 @@ suite('Database test', function () {
             images: [Random.image()],
             pinyin: Random.string(3, 8),
             eName: Random.string(3, 8)
-        }).then(function (raw) {
-            console.log(raw);
-            assert(raw);
-            done();
-        }).catch(function (err) {
-            console.log(err);
-            done(err);
         });
+
+        try {
+            assert(raw);
+            return new Promise(function (resolve, reject) {
+                resolve();
+            });
+        } catch (e) {
+            return new Promise(function (resolve, reject) {
+                reject(e);
+            });
+        }
     });
 
     test('should be able to create order', function (done) {

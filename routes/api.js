@@ -2,6 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const cart = require('../controllers/cart');
+const user = require('../controllers/user');
+
+router.get('/user', user.getUser);
 
 // get cart
 router.get('/cart', cart.getCart);

@@ -8,9 +8,10 @@ module.exports = {
 
         let cart = await Cart.findById(userId).exec();
 
-        cart = cart || {};
+        cart = cart || {contents: []};
+        cart = cart.contents;
 
-        util.handleResponse(res, null, cart);
+        util.handleResponse(res, null, {cartItems: cart});
     },
     addToCart: async function (req, res, next) {
         if (!util.reqShouldContain(['id', 'options', 'amount'])) {

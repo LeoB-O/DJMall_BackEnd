@@ -4,7 +4,7 @@ const Order = require('../models/Order');
 const Good = require('../models/Good')
 module.exports = {
     getinfo: function (req, res, next) {
-        let id = req.query.ID
+        let id = req.jwt.payload.userId
         console.log(id)
         User.findOne({
             _id: id
@@ -89,7 +89,7 @@ module.exports = {
                     address[ad].detail=detail
                     address[ad].name=name
                 }
-                
+
             }
             console.log(address)
             User.findOneAndUpdate({_id:uid},{address:address},function(err){

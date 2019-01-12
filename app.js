@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(jwt.init(credentials.jwt.development.secret, credentials.jwt.development.options));
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -38,7 +38,7 @@ app.use(function(err, req, res, next) {
     if (err.name == 'JWTExpressError') {
         // user is unauthorized
         res.status(401);
-        res.render('401', {error: err});
+        res.send('401', {error: err});
     } else {
         next(err);
     }
