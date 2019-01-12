@@ -41,8 +41,24 @@ suite('Database test', function () {
             assert(user.username === 'admin');
             done()
         })
+    });
 
+    test('should be able to add category.', async function () {
+        let raw = await Category.create({
+            cateName: Random.string(3, 10),
+            subCate: [Random.string(3, 10), Random.string(3, 10)]
+        });
 
+        try {
+            assert(raw);
+            return new Promise(function (resolve, reject) {
+                resolve();
+            });
+        } catch (e) {
+            return new Promise(function (resolve, reject) {
+                reject(e);
+            });
+        }
     });
 
     test('should be able to create Good.', async function () {
@@ -160,24 +176,6 @@ suite('Database test', function () {
                     reject(e);
                 });
             }
-        }
-    });
-
-    test('should be able to add category.', async function () {
-        let raw = await Category.create({
-            cateName: Random.string(3, 10),
-            subCate: [Random.string(3, 10), Random.string(3, 10)]
-        });
-
-        try {
-            assert(raw);
-            return new Promise(function (resolve, reject) {
-                resolve();
-            });
-        } catch (e) {
-            return new Promise(function (resolve, reject) {
-                reject(e);
-            });
         }
     });
 
