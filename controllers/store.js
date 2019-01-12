@@ -13,6 +13,10 @@ module.exports = {
 
         let id = req.query.id;
         let store = await Merchant.findById(id);
+        if (!store) {
+            util.handleResponse(res, 'No such store', null)
+            return;
+        }
         let category = store.category;
 
         category = category.map((current) => {

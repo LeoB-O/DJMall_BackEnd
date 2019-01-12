@@ -100,7 +100,7 @@ module.exports = {
             options: good.options,
             description: good.description,
             imgUrls: good.images,
-            merchantId: good.merchantId
+            merchantId: good.merchantID
         };
 
         util.handleResponse(res, null, good);

@@ -20,10 +20,10 @@ module.exports = {
             from: receiverId,
             to: senderId
         });
-
+        
         let ret = {
-            fromUser: chatTo.contents,
-            toUser: chatFrom.contents
+            fromUser: chatTo?chatTo.contents:[],
+            toUser: chatFrom?chatFrom.contents:[]
         }
 
         util.handleResponse(res, null, ret);
