@@ -5,6 +5,9 @@ module.exports = {
                 if (!req.body[p] && !req.query[p]) {
                     return false;
                 }
+                if (req.body[p] === 'undefined' || req.query[p] === 'undefined') {
+                    return false;
+                }
             }
             return true;
         }

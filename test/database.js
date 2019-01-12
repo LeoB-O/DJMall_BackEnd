@@ -63,6 +63,7 @@ suite('Database test', function () {
 
     test('should be able to create Good.', async function () {
         let category = await Category.findOne();
+        let merchant = await Merchant.findOne();
 
         let raw = await Good.create({
             name: Random.string(3, 8),
@@ -78,7 +79,8 @@ suite('Database test', function () {
             description: Random.paragraph(),
             images: [Random.image()],
             pinyin: Random.string(3, 8),
-            eName: Random.string(3, 8)
+            eName: Random.string(3, 8),
+            merchantID: merchant._id
         });
 
         try {

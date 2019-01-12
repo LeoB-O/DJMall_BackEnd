@@ -13,7 +13,8 @@ module.exports = {
                 category: current.category,
                 options: current.options,
                 description: current.description,
-                imgUrls: current.images
+                imgUrls: current.images,
+                merchantID: current.merchantID
             }
         });
 
@@ -39,6 +40,7 @@ module.exports = {
                 options: current.options,
                 description: current.description,
                 imageUrl: current.images[0],
+                merchantID: current.merchantID
             }
         });
 
@@ -73,6 +75,7 @@ module.exports = {
                 options: good.options,
                 description: good.description,
                 imgUrls: good.images,
+                merchantID: good.merchantID
             })
         }
         util.handleResponse(res, null, {goods: ret});
@@ -95,6 +98,7 @@ module.exports = {
             options: good.options,
             description: good.description,
             imgUrls: good.images,
+            merchantId: good.merchantId
         };
 
         util.handleResponse(res, null, good);

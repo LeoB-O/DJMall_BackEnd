@@ -7,13 +7,26 @@ module.exports = {
             util.handleResponse(res, 'Missing store id.', null);
             return;
         }
+        if (req.query.id == 'undefined') {
+            util.handleResponse(res, 'Missing store id', null);
+        }
 
         let id = req.query.id;
-        let store = Merchant.findById(id);
+        let store = await Merchant.findById(id);
+        let category = store.category;
+
+        category = category.map((current) => {
+            return {
+                name: current.name,
+                value: current.subCate.map((current) => {
+                    return current.name;
+                })
+            };
+        });
 
         store = {
             name: store.name,
-            category: store.category,
+            category: category,
         };
 
         util.handleResponse(res, null, store);
