@@ -104,5 +104,90 @@ module.exports = {
         };
 
         util.handleResponse(res, null, good);
+    },
+
+    addGood: async function (req, res, next) {
+        if (!util.reqShouldContain(['name', 'price'])) {
+            util.handleResponse(res, 'Missing name or price', null);
+            return;
+        }
+        let name = req.body.name;
+        let price = req.body.price;
+        let category = req.body.category || {};
+        let options = req.body.options || [];
+        let description = req.body.description || '';
+        let images = req.body.images || [];
+        let pinyin = req.body.pinyin || '';
+        let eName = req.body.eName || '';
+        let merchantID = req.body.merchantID || '';
+
+        await Good.create({
+            name: name,
+            price: price,
+            category: category,
+            options: options,
+            description: description,
+            images: images,
+            pinyin: pinyin,
+            eName: eName,
+            merchantID: merchantID
+        });
+
+        util.handleResponse(ers, null, {});
+    },
+
+    deleteGoodById: async function (req, res, next) {
+        if (!util.reqShouldContain(['id'])) {
+            util.handleResponse(res, 'Missing id.', null);
+            return;
+        }
+
+        let id = req.body.id;
+
+        let good = await Good.findOneAndDelete({_id: id});
+
+        if (!good) {
+            util.handleResponse(res, 'No such good.', null);
+            return;
+        }
+        util.handleResponse(res, null, {deleted: good});
+    },
+
+    modifyGood: async function (req, res, next) {
+        if (!util.reqShouldContain(['id'])) {
+            util.handleResponse(res, 'Missing id.', null);
+            return;
+        }
+
+        let good = await Good.findById(req.body.id);
+
+        if (!good) {
+            util.handleResponse(res, 'No such good.', null);
+            return;
+        }
+
+        let name = req.body.name || good.name;
+        let price = req.body.price || good.price;
+        let category = req.body.category || good.category;
+        let options = req.body.options || good.options;
+        let description = req.body.description || good.description;
+        let images = req.body.images || good.images;
+        let pinyin = req.body.pinyin || good.pinyin;
+        let eName = req.body.eName || good.eName;
+        let merchantID = req.body.merchantID || good.merchantID;
+
+        await Good.updateOne(good, {
+            name: name,
+            price: price,
+            category: category,
+            options: options,
+            descriptions: description,
+            images: images,
+            pinyin: pinyin,
+            eName: eName,
+            merchantID: merchantID
+        });
+
+        util.handleResponse(res, null, {});
     }
 }

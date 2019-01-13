@@ -4,6 +4,7 @@ const router = express.Router();
 const cart = require('../controllers/cart');
 const user = require('../controllers/user');
 const chat = require('../controllers/chat');
+const good = require('../controllers/good');
 const personalinfo = require('../controllers/personalinfo');
 
 router.get('/user', user.getUser);
@@ -40,5 +41,14 @@ router.get('/chat', chat.getChat);
 
 // send message
 router.post('/chat', chat.sendMessage);
+
+// add good
+router.put('/good', good.addGood);
+
+// delete good
+router.delete('/good', good.deleteGoodById);
+
+// update good
+router.post('/good', good.modifyGood);
 
 module.exports = router;
