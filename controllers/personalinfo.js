@@ -31,8 +31,10 @@ module.exports = {
             _id: id
         })
         let orderid = user.orderId
+
         let content = new Array()
         for (let oid of orderid) {
+            console.log(oid)
             let price = 0
             let order = await Order.findOne({
                 _id: oid
@@ -44,16 +46,35 @@ module.exports = {
                 })
                 price += good.price
             }
+            let time = util.formatDate(new Date(order.createdAt),"yyyy-MM-dd hh:mm:ss")
             content.push({
                 id: oid,
                 price: price,
-                time: order.createdAt
+                time: time
             })
         }
         util.handleResponse(res, null, {
             content: content
         })
     },
+    getorderdetail:async function(req,res,next){
+        let orderid=req.query.orderid
+        let order=await Order.findOne({_id:orderid})
+        let goodids=order.goodIds
+        let goods=new Array()
+        for(let g of goodids)
+        {
+            let good=await Good.findOne({_id:g});
+            goods.push({
+                id:good._id,
+                name:good.name,
+                image:good.images[0],
+                price:good.price,
+                description:good.description
+            })
+        }
+        util.handleResponse(res,null,{goods:goods})
+    } ,
     getaddress: function (req, res, next) {
         let id = req.jwt.payload.userId;
         User.findOne({
@@ -66,38 +87,40 @@ module.exports = {
         })
     },
     editaddress: function (req, res, next) {
-        let addressid=req.body.AddressID
+        let addressid = req.body.AddressID
         let id = req.jwt.payload.userId;
-        let province=req.body.province
-        let city=req.body.city
-        let district=req.body.district
-        let detail=req.body.detail
-        let name=req.body.name
+        let province = req.body.province
+        let city = req.body.city
+        let district = req.body.district
+        let detail = req.body.detail
+        let name = req.body.name
 
-        User.findOne({
-        },function(err,user){
-            let address=user.address
-            for(let ad in address)
-            {
-                if(address[ad]._id==addressid)
-                {
-                    address[ad].province=province
-                    address[ad].city=city
-                    address[ad].district=district
-                    address[ad].detail=detail
-                    address[ad].name=name
+        User.findOne({}, function (err, user) {
+            let address = user.address
+            for (let ad in address) {
+                if (address[ad]._id == addressid) {
+                    address[ad].province = province
+                    address[ad].city = city
+                    address[ad].district = district
+                    address[ad].detail = detail
+                    address[ad].name = name
                 }
 
             }
             console.log(address)
-            User.findOneAndUpdate({_id:uid},{address:address},function(err){
-                if(err)
-                {
-                    util.handleResponse(res,err,{ok:false})
-                }
-                else
-                {
-                    util.handleResponse(res,err,{ok:true})
+            User.findOneAndUpdate({
+                _id: uid
+            }, {
+                address: address
+            }, function (err) {
+                if (err) {
+                    util.handleResponse(res, err, {
+                        ok: false
+                    })
+                } else {
+                    util.handleResponse(res, err, {
+                        ok: true
+                    })
                 }
             })
 
@@ -107,7 +130,7 @@ module.exports = {
         let newusername = req.body.username
         let newpassword = req.body.password
         let newemail = req.body.email
-        let oldusername =req.jwt.payload.username
+        let oldusername = req.jwt.payload.username
 
         User.findOne().or([{
             username: newusername
@@ -133,25 +156,26 @@ module.exports = {
             }
         })
     },
-    deletead:function(req,res,next){
-        let id=req.body.id
-        let username=req.body.username
-        User.findOne({username:username},function(err,user){
-            for(let ad in user.address)
-            {
-                if(user.address[ad]._id==id)
-                {
-                    user.address.splice(ad,1)
+    deletead: function (req, res, next) {
+        let id = req.jwt.payload.userId;
+        let username = req.body.username
+        User.findOne({
+            username: username
+        }, function (err, user) {
+            for (let ad in user.address) {
+                if (user.address[ad]._id == id) {
+                    user.address.splice(ad, 1)
                 }
             }
             user.save();
-            if(err)
-            {
-                util.handleResponse(res,err,{ok:false})
-            }
-            else
-            {
-                util.handleResponse(res,err,{ok:true})
+            if (err) {
+                util.handleResponse(res, err, {
+                    ok: false
+                })
+            } else {
+                util.handleResponse(res, err, {
+                    ok: true
+                })
             }
         })
     }
