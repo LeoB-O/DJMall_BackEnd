@@ -104,7 +104,8 @@ suite('Database test', function () {
             images: [Random.image()],
             pinyin: Random.string(3, 8),
             eName: Random.string(3, 8),
-            merchantID: merchant._id
+            merchantID: merchant._id,
+            Rate:{rate:0,ratenum:0}
         });
 
         merchant.category[0].subCate[0].goodIds.push(raw._id);
