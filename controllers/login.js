@@ -31,7 +31,13 @@ module.exports = {
                     username: user.username,
                     permission: user.permission,
                 });
-                util.handleResponse(res, null, jwt.token);
+                util.handleResponse(res, null, {
+                    token:jwt.token,
+                    role: user.permission==0?['admin']:(user.permission<1000?['merchant']:[]),
+                    introduction: 'introduction',
+                    name: user.name,
+                    uid: user._id
+                });
             }
             else{
                 util.handleResponse(res,'password error',null)
