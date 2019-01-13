@@ -20,10 +20,23 @@ module.exports = {
             from: receiverId,
             to: senderId
         });
-        
+        let chatcontent=new Array()
+        let chatfromcontent=new Array()
+        chatcontent=chatTo?chatTo.contents:[]
+        chatfromcontent=chatFrom?chatFrom.contents:[]
+        for(let ct in chatcontent)
+        {
+            let time = util.formatDate(new Date(chatcontent[ct].time),"yyyy-MM-dd hh:mm:ss")
+            chatcontent[ct].time=time
+        }
+        for(let cf in chatfromcontent)
+        {
+            let time = util.formatDate(new Date(chatfromcontent[cf].time),"yyyy-MM-dd hh:mm:ss")
+            chatfromcontent[cf].time=time
+        }
         let ret = {
-            fromUser: chatTo?chatTo.contents:[],
-            toUser: chatFrom?chatFrom.contents:[]
+            fromUser: chatTo?chatcontent:[],
+            toUser: chatFrom?chatfromcontent:[]
         }
 
         util.handleResponse(res, null, ret);
