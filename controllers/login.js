@@ -33,7 +33,7 @@ module.exports = {
                 });
                 util.handleResponse(res, null, {
                     token:jwt.token,
-                    role: user.permission==0?['admin']:(user.permission<1000?['merchant']:[]),
+                    roles: user.permission==0?['admin']:(user.permission<1000?['merchant']:[]),
                     introduction: 'introduction',
                     name: user.name,
                     uid: user._id
