@@ -16,6 +16,7 @@ let goodSchema = mongoose.Schema({
     pinyin: String,
     eName: String,
     merchantID:String,
+    Rate:{rate:Number,ratenum:Number},
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}
 });
