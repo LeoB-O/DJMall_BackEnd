@@ -168,6 +168,7 @@ module.exports = {
 
         let name = req.body.name || good.name;
         let price = req.body.price || good.price;
+        console.log(price);
         let category = req.body.category || good.category;
         let options = req.body.options || good.options;
         let description = req.body.description || good.description;
@@ -176,7 +177,7 @@ module.exports = {
         let eName = req.body.eName || good.eName;
         let merchantID = req.body.merchantID || good.merchantID;
 
-        await Good.updateOne(good, {
+        await Good.updateOne({_id: req.body.id}, {
             name: name,
             price: price,
             category: category,
