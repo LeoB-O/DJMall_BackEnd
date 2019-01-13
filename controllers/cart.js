@@ -6,10 +6,24 @@ module.exports = {
     getCart: async function (req, res, next) {
         let userId = req.jwt.payload.userId;
 
-        let cart = await Cart.findById(userId).exec();
+        let cart = await Cart.findOne({userId: userId}).exec();
+
+        console.log(userId);
+        console.log(cart);
 
         cart = cart || {contents: []};
-        cart = cart.contents;
+        cart = cart.contents.map((current) => {
+            return {
+                id: current.id,
+                name: current.name,
+                price: current.price,
+                amount: current.amount,
+                imgUrl: current.imgUrl,
+                typeArgs: current.typeArgs.map((arg) => {
+                    return arg.attrName+':'+arg.attrValue
+                })
+            }
+        });
 
         util.handleResponse(res, null, {cartItems: cart});
     },
