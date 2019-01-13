@@ -1,5 +1,6 @@
 const Good = require('../models/Good');
 const Merchant = require('../models/Merchant');
+const Category = require('../models/Category');
 const util = require('../util/util');
 
 module.exports = {
@@ -168,8 +169,11 @@ module.exports = {
 
         let name = req.body.name || good.name;
         let price = req.body.price || good.price;
-        console.log(price);
-        let category = req.body.category || good.category;
+        let goodCate = req.body.category || good.category;
+        let cateCate = {
+                cateName: goodCate.cateName || goodCate.parentCate,
+                subCate: goodCate.subCate
+            }
         let options = req.body.options || good.options;
         let description = req.body.description || good.description;
         let images = req.body.images || good.images;
@@ -177,10 +181,18 @@ module.exports = {
         let eName = req.body.eName || good.eName;
         let merchantID = req.body.merchantID || good.merchantID;
 
+        console.log(goodCate);
+        console.log(cateCate);
+
+        let cate = await Category.findOne(cateCate);
+        if (!cate) {
+            let c = await Category.create(cateCate);
+        }
+
         await Good.updateOne({_id: req.body.id}, {
             name: name,
             price: price,
-            category: category,
+            category: goodCate,
             options: options,
             descriptions: description,
             images: images,
