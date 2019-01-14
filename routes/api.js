@@ -54,5 +54,8 @@ router.post('/good', good.modifyGood);
 
 // edit store
 router.post('/store', store.editStore);
+router.delete('/user',user.deleteUser);
+
+router.get('/getuser',user.getUsers);
 
 module.exports = router;
