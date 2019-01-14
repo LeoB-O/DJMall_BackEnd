@@ -1,4 +1,5 @@
 const Merchant = require('../models/Merchant');
+const Category = require('../models/Category');
 const util = require('../util/util');
 
 module.exports = {
@@ -39,11 +40,72 @@ module.exports = {
         let stores = await Merchant.find();
         stores = stores.map((current) => {
             return {
+                id: current._id,
                 name: current.name,
                 category: current.category,
             }
         });
 
         util.handleResponse(res, null, {stores: stores});
+    },
+    editStore: async function (req, res, next) {
+        if (!util.reqShouldContain(['id'])) {
+            util.handleResponse(res, 'Missing merchant id.', null);
+            return;
+        }
+
+        let id = req.body.id;
+        let name = req.body.name;
+        let category = req.body.category;
+
+        let store = await Merchant.findById(id)
+
+        if (!store)  {
+            util.handleResponse(res, 'No such store', null);
+            return;
+        }
+
+        name = name || store.name;
+        category = category || store.category;
+
+        store.name = name;
+        store.category = category;
+
+        await store.save();
+
+        category = category.map((current) => {
+            return {
+                cateName: current.name,
+                subCate: current.subCate.map((subCate) => {
+                    return subCate.name;
+                })
+            }
+        });
+
+        for (let c of category) {
+            let cate = await Category.findOne({cateName: c.cateName});
+
+            if (!cate) {
+                await Category.create(c);
+                continue;
+            }
+
+            let exist = false;
+            for (let s of c.subCate) {
+                exist = false;
+                for (let ss of cate.subCate) {
+                    if (s == ss) {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist) {
+                    cate.subCate.push(s);
+                }
+            }
+            await cate.save();
+        }
+
+        util.handleResponse(res, null, {});
     }
 };

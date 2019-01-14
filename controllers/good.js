@@ -181,12 +181,21 @@ module.exports = {
         let eName = req.body.eName || good.eName;
         let merchantID = req.body.merchantID || good.merchantID;
 
-        console.log(goodCate);
-        console.log(cateCate);
-
-        let cate = await Category.findOne(cateCate);
+        let cate = await Category.findOne({cateName: cateCate.cateName});
         if (!cate) {
             let c = await Category.create(cateCate);
+        } else {
+            let exist = false;
+            for (let c of cate.subCate) {
+                if (cateCate.subCate == c) {
+                    exist = true;
+                    break;
+                }
+            }
+            if (!exist) {
+                cate.subCate.push(cateCate.subCate);
+                await cate.save();
+            }
         }
 
         await Good.updateOne({_id: req.body.id}, {

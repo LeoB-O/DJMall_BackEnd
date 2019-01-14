@@ -39,7 +39,7 @@ module.exports = {
 
         let userId = req.jwt.payload.userId;
         let good = await Good.findById(goodId);
-        let cart = await Cart.findById(userId);
+        let cart = await Cart.findOne({userId: userId});
 
         if (!good) {
             util.handleResponse(res, 'No such good.', null)
@@ -95,5 +95,32 @@ module.exports = {
             util.handleResponse(res, 'No such user.', null);
         else
             util.handleResponse(res, null, {})
+    },
+    deleteFromCart: async function(req, res, next) {
+        if (!util.reqShouldContain(['id'])) {
+            util.handleResponse(res, 'Missing id', null);
+            return;
+        }
+
+        let id = req.query.id;
+        let userId = req.jwt.payload.userId;
+
+        let cart = await Cart.findOne({userId: userId});
+
+        if (!cart){
+            util.handleResponse(res, 'No such cart.', null);
+            return;
+        }
+
+        for (let c in cart.contents) {
+            if (cart.contents[c].id == id) {
+                cart.contents.splice(c, 1);
+                break;
+            }
+        }
+
+        await cart.save();
+
+        util.handleResponse(res, null, {});
     }
 };

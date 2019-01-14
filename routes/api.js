@@ -5,6 +5,7 @@ const cart = require('../controllers/cart');
 const user = require('../controllers/user');
 const chat = require('../controllers/chat');
 const good = require('../controllers/good');
+const store = require('../controllers/store');
 const personalinfo = require('../controllers/personalinfo');
 
 router.get('/user', user.getUser);
@@ -56,6 +57,8 @@ router.delete('/good', good.deleteGoodById);
 // update good
 router.post('/good', good.modifyGood);
 
+// edit store
+router.post('/store', store.editStore);
 router.delete('/user',user.deleteUser);
 
 router.get('/getuser',user.getUsers);
@@ -63,5 +66,6 @@ router.get('/getuser',user.getUsers);
 router.get('/chatbymerchant',chat.getChatByMerchant)
 
 router.post('/changeunread',chat.changeunread)
+router.delete('/cart', cart.deleteFromCart);
 
 module.exports = router;
