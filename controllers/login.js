@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const util = require('../util/util');
+const JWT = require('jwt-express');
 
 module.exports = {
     login: function (req, res, next) {
@@ -44,5 +45,9 @@ module.exports = {
                 util.handleResponse(res,'password error',null)
             }
         })
+    },
+    logout: function (req, res, next) {
+        JWT.clear();
+        util.handleResponse(res, null, {});
     }
 };

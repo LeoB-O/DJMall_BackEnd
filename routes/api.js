@@ -7,6 +7,7 @@ const chat = require('../controllers/chat');
 const good = require('../controllers/good');
 const store = require('../controllers/store');
 const personalinfo = require('../controllers/personalinfo');
+const login = require('../controllers/login');
 
 router.get('/user', user.getUser);
 
@@ -71,5 +72,7 @@ router.delete('/cart', cart.deleteFromCart);
 router.put('/store', store.addStore);
 
 router.delete('/store', store.deleteStore);
+
+router.get('/logout', login.logout);
 
 module.exports = router;
