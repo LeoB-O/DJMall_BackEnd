@@ -68,4 +68,8 @@ router.get('/chatbymerchant',chat.getChatByMerchant)
 router.post('/changeunread',chat.changeunread)
 router.delete('/cart', cart.deleteFromCart);
 
+router.put('/store', store.addStore);
+
+router.delete('/store', store.deleteStore);
+
 module.exports = router;

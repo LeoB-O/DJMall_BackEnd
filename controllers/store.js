@@ -12,7 +12,7 @@ module.exports = {
             util.handleResponse(res, 'Missing store id', null);
         }
 
-        let id = req.query.id;
+        let id = req.jwt.payload.merchantId;
         let store = await Merchant.findById(id);
         if (!store) {
             util.handleResponse(res, 'No such store', null)
@@ -105,6 +105,43 @@ module.exports = {
                 }
             }
             await cate.save();
+        }
+
+        util.handleResponse(res, null, {});
+    },
+    addStore: async function (req, res, next) {
+        if (!util.reqShouldContain(['name'])) {
+            util.handleResponse(res, 'Missing store name.', null);
+            return;
+        }
+
+        let storeName = req.body.name;
+
+        await Merchant.create({
+            name: storeName,
+            category: [{
+                name: 'init',
+                subCate: [{
+                    name: 'init sub',
+                    goodIds: []
+                }]
+            }]
+        })
+
+        util.handleResponse(res, null, {});
+    },
+    deleteStore: async function(req, res, next) {
+        if(!util.reqShouldContain(['id'])) {
+            util.handleResponse(res, 'Missing store id', null);
+            return;
+        }
+
+        let id = req.query.id
+        let store = await Merchant.findOneAndDelete({_id: id});
+
+        if (!store) {
+            util.handleResponse(res, 'No such store.', null);
+            return;
         }
 
         util.handleResponse(res, null, {});

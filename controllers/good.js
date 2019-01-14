@@ -120,9 +120,10 @@ module.exports = {
         let images = req.body.images || [];
         let pinyin = req.body.pinyin || '';
         let eName = req.body.eName || '';
-        let merchantID = req.body.merchantID || '';
+        let merchantID = req.jwt.payload.merchantId || '';
+        console.log(merchantID);
 
-        await Good.create({
+        let good = await Good.create({
             name: name,
             price: price,
             category: category,
@@ -133,6 +134,42 @@ module.exports = {
             eName: eName,
             merchantID: merchantID
         });
+
+        let merchant = await Merchant.findById(merchantID);
+        let parentCateExist = false;
+        let subCateExist = false;
+
+        for (let c in merchant.category) {
+             if (merchant.category[c].name == category.parentCate) {
+                 parentCateExist = true;
+             }
+             for (let s in merchant.category[c].subCate) {
+                 if (merchant.category[c].subCate[s].name == category.subCate) {
+                     subCateExist = true;
+                     if (parentCateExist && subCateExist) {
+                        merchant.category[c].subCate[s].goodIds.push(good._id);
+                     }
+                 }
+             }
+             if (parentCateExist && !subCateExist) {
+                 merchant.category[c].subCate.push({
+                     name: category.subCate,
+                     goodIds: [good._id]
+                 });
+             }
+        }
+
+        if (!parentCateExist) {
+            console.log('???Not exist')
+            merchant.category.push({
+                name: category.parentCate,
+                subCate: [{
+                    name: category.subCate,
+                    goodIds: good._id
+            }]});
+        }
+
+        await merchant.save()
 
         util.handleResponse(res, null, {});
     },
