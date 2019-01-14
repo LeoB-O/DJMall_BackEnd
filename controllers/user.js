@@ -5,10 +5,12 @@ module.exports = {
         let userId = req.jwt.payload.userId;
         let username = req.jwt.payload.username;
         let permission = req.jwt.payload.permission;
+        let merchantId = req.jwt.payload.merchantId;
         res.send({
             success: true,
             data: {
                 id: req.jwt.payload.userId,
+                merchantId: merchantId || '',
                 uid: userId,
                 token: req.query.token,
                 roles: permission==0?['admin']:(permission<1000?['merchant']:[]),
@@ -23,7 +25,7 @@ module.exports = {
         User.deleteOne({
             username: username
         }, function (err, user) {
-            if (err) {  
+            if (err) {
                 util.handleResponse(res, err, {
                     ok: false
                 })

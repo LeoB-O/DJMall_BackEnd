@@ -25,7 +25,8 @@ module.exports = {
                 name: current.name,
                 value: current.subCate.map((current) => {
                     return current.name;
-                })
+                }),
+                subCate: current.subCate
             };
         });
 
