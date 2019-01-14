@@ -134,7 +134,7 @@ module.exports = {
             merchantID: merchantID
         });
 
-        util.handleResponse(ers, null, {});
+        util.handleResponse(res, null, {});
     },
 
     deleteGoodById: async function (req, res, next) {
@@ -143,7 +143,7 @@ module.exports = {
             return;
         }
 
-        let id = req.body.id;
+        let id = req.query.id;
 
         let good = await Good.findOneAndDelete({_id: id});
 
