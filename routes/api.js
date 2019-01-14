@@ -58,4 +58,6 @@ router.delete('/user',user.deleteUser);
 
 router.get('/getuser',user.getUsers);
 
+router.delete('/cart', cart.deleteFromCart);
+
 module.exports = router;
