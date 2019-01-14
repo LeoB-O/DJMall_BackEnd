@@ -17,6 +17,7 @@ let userSchema = mongoose.Schema({
         phone: String,
         name: String
     }],
+    merchantId:String,
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}
 })

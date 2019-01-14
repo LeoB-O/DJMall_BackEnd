@@ -5,7 +5,8 @@ let chatSchema = mongoose.Schema({
     to: String,
     contents: [{
         time: Date,
-        message: String
+        message: String,
+        unread:Boolean
     }],
     createdAt: {type: Date, default: Date.now},
     updatedAt: {type: Date, default: Date.now}

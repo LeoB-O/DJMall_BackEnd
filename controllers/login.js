@@ -30,6 +30,7 @@ module.exports = {
                     userId: user._id,
                     username: user.username,
                     permission: user.permission,
+                    merchantId: user.merchantId
                 });
                 util.handleResponse(res, null, {
                     token:jwt.token,

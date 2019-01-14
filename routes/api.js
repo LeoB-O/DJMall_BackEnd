@@ -39,8 +39,13 @@ router.post('/deleteaddress', personalinfo.deletead);
 // getChat
 router.get('/chat', chat.getChat);
 
-// send message
+router.get('/chatm',chat.getChatM);
+
+// send message from user
 router.post('/chat', chat.sendMessage);
+
+//send message from merchant
+router.post('/chatm',chat.sendMessageM);
 
 // add good
 router.put('/good', good.addGood);
@@ -54,5 +59,9 @@ router.post('/good', good.modifyGood);
 router.delete('/user',user.deleteUser);
 
 router.get('/getuser',user.getUsers);
+
+router.get('/chatbymerchant',chat.getChatByMerchant)
+
+router.post('/changeunread',chat.changeunread)
 
 module.exports = router;
