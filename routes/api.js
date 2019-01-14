@@ -51,4 +51,8 @@ router.delete('/good', good.deleteGoodById);
 // update good
 router.post('/good', good.modifyGood);
 
+router.delete('/user',user.deleteUser);
+
+router.get('/getuser',user.getUsers);
+
 module.exports = router;

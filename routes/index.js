@@ -41,6 +41,7 @@ router.get('/getrate',rate.getrate);
 
 router.post('/commitrate',rate.commitrate)
 
+
 router.options('*', (req, res) => {
   res.send();
 });
