@@ -1,4 +1,5 @@
 const Merchant = require('../models/Merchant');
+const Category = require('../models/Category');
 const util = require('../util/util');
 
 module.exports = {
@@ -71,6 +72,39 @@ module.exports = {
         store.category = category;
 
         await store.save();
+
+        category = category.map((current) => {
+            return {
+                cateName: current.name,
+                subCate: current.subCate.map((subCate) => {
+                    return subCate.name;
+                })
+            }
+        });
+
+        for (let c of category) {
+            let cate = await Category.findOne({cateName: c.cateName});
+
+            if (!cate) {
+                await Category.create(c);
+                continue;
+            }
+
+            let exist = false;
+            for (let s of c.subCate) {
+                exist = false;
+                for (let ss of cate.subCate) {
+                    if (s == ss) {
+                        exist = true;
+                        break;
+                    }
+                }
+                if (!exist) {
+                    cate.subCate.push(s);
+                }
+            }
+            await cate.save();
+        }
 
         util.handleResponse(res, null, {});
     }
