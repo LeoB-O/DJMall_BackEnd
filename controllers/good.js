@@ -235,6 +235,42 @@ module.exports = {
             }
         }
 
+        let merchant = await Merchant.findById(merchantID);
+        let parentCateExist = false;
+        let subCateExist = false;
+
+        for (let c in merchant.category) {
+            if (merchant.category[c].name == cateCate.cateName) {
+                parentCateExist = true;
+            }
+            for (let s in merchant.category[c].subCate) {
+                if (merchant.category[c].subCate[s].name == cateCate.subCate) {
+                    subCateExist = true;
+                    if (parentCateExist && subCateExist) {
+                        merchant.category[c].subCate[s].goodIds.push(good._id);
+                    }
+                }
+            }
+            if (parentCateExist && !subCateExist) {
+                merchant.category[c].subCate.push({
+                    name: cateCate.subCate,
+                    goodIds: [good._id]
+                });
+            }
+        }
+
+        if (!parentCateExist) {
+            console.log('???Not exist')
+            merchant.category.push({
+                name: cateCate.cateName,
+                subCate: [{
+                    name: cateCate.subCate,
+                    goodIds: good._id
+                }]});
+        }
+
+        await merchant.save()
+
         await Good.updateOne({_id: req.body.id}, {
             name: name,
             price: price,

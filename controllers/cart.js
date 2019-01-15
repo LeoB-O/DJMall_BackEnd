@@ -19,9 +19,7 @@ module.exports = {
                 price: current.price,
                 amount: current.amount,
                 imgUrl: current.imgUrl,
-                typeArgs: current.typeArgs.map((arg) => {
-                    return arg.attrName+':'+arg.attrValue
-                })
+                typeArgs: current.typeArgs
             }
         });
 
