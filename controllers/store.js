@@ -10,6 +10,7 @@ module.exports = {
         }
         if (req.query.id == 'undefined') {
             util.handleResponse(res, 'Missing store id', null);
+            return;
         }
 
         let id = req.query.id || req.jwt.payload.merchantId;
