@@ -12,7 +12,8 @@ module.exports = {
             util.handleResponse(res, 'Missing store id', null);
         }
 
-        let id = req.jwt.payload.merchantId;
+        let id = req.query.id || req.jwt.payload.merchantId;
+        console.log(id)
         let store = await Merchant.findById(id);
         if (!store) {
             util.handleResponse(res, 'No such store', null)

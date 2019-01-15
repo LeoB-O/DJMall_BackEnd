@@ -38,6 +38,9 @@ router.post('/editaddress', personalinfo.editaddress);
 // deleteaddress
 router.post('/deleteaddress', personalinfo.deletead);
 
+
+router.post('/addaddress',personalinfo.addAddress)
+
 // getChat
 router.get('/chat', chat.getChat);
 

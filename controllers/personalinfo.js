@@ -46,7 +46,7 @@ module.exports = {
                 })
                 price += good.price
             }
-            let time = util.formatDate(new Date(order.createdAt),"yyyy-MM-dd hh:mm:ss")
+            let time = util.formatDate(new Date(order.createdAt), "yyyy-MM-dd hh:mm:ss")
             content.push({
                 id: oid,
                 price: price,
@@ -57,24 +57,29 @@ module.exports = {
             content: content
         })
     },
-    getorderdetail:async function(req,res,next){
-        let orderid=req.query.orderid
-        let order=await Order.findOne({_id:orderid})
-        let goodids=order.goodIds
-        let goods=new Array()
-        for(let g of goodids)
-        {
-            let good=await Good.findOne({_id:g});
+    getorderdetail: async function (req, res, next) {
+        let orderid = req.query.orderid
+        let order = await Order.findOne({
+            _id: orderid
+        })
+        let goodids = order.goodIds
+        let goods = new Array()
+        for (let g of goodids) {
+            let good = await Good.findOne({
+                _id: g
+            });
             goods.push({
-                id:good._id,
-                name:good.name,
-                image:good.images[0],
-                price:good.price,
-                description:good.description
+                id: good._id,
+                name: good.name,
+                image: good.images[0],
+                price: good.price,
+                description: good.description
             })
         }
-        util.handleResponse(res,null,{goods:goods})
-    } ,
+        util.handleResponse(res, null, {
+            goods: goods
+        })
+    },
     getaddress: function (req, res, next) {
         let id = req.jwt.payload.userId;
         User.findOne({
@@ -94,6 +99,7 @@ module.exports = {
         let district = req.body.district
         let detail = req.body.detail
         let name = req.body.name
+        let phonenumber = req.body.phonenumber
 
         User.findOne({}, function (err, user) {
             let address = user.address
@@ -104,12 +110,13 @@ module.exports = {
                     address[ad].district = district
                     address[ad].detail = detail
                     address[ad].name = name
+                    address[ad].phone = phonenumber
                 }
 
             }
             console.log(address)
             User.findOneAndUpdate({
-                _id: uid
+                _id: id
             }, {
                 address: address
             }, function (err) {
@@ -137,7 +144,7 @@ module.exports = {
         }, {
             email: newemail
         }]).exec(function (err, user) {
-            if (user == null) {
+            if (user == null || user._id == req.jwt.payload.userId) {
                 User.findOneAndUpdate({
                     username: oldusername
                 }, {
@@ -150,33 +157,59 @@ module.exports = {
                     })
                 })
             } else {
-                Util.handleResponse(res, err, {
+                util.handleResponse(res, err, {
                     ok: false
                 })
             }
         })
     },
-    deletead: function (req, res, next) {
+    deletead: async function (req, res, next) {
         let id = req.jwt.payload.userId;
-        let username = req.body.username
+        let addressid = req.body.addressid
+        let user=await User.findOne({_id: id}).lean()
+        console.log(user)
+        for(let ad in user.address)
+        {
+            if(user.address[ad]._id==addressid)
+            {
+                user.address.splice(ad,1)
+                let usert=await User.findOne({_id:id})
+                usert.address=user.address
+                usert.save()
+                util.handleResponse(res,null,{ok:true})
+            }
+
+        }
+
+
+    },
+    addAddress: function (req, res, next) {
+        let id = req.jwt.payload.userId;
+        let name = req.body.name
+        let province = req.body.province
+        let city = req.body.city
+        let district = req.body.district
+        let detail = req.body.detail
+        let phone = req.body.phonenumber
         User.findOne({
-            username: username
-        }, function (err, user) {
-            for (let ad in user.address) {
-                if (user.address[ad]._id == id) {
-                    user.address.splice(ad, 1)
-                }
-            }
-            user.save();
+            _id: id
+        }).exec(function (err, user) {
             if (err) {
-                util.handleResponse(res, err, {
-                    ok: false
-                })
+                util.handleResponse(res, err, {ok:false})
             } else {
-                util.handleResponse(res, err, {
-                    ok: true
+                
+                user.address.push({
+                    province: province,
+                    city: city,
+                    detail: detail,
+                    phone: phone,
+                    name: name,
+                    district: district
                 })
+                user.save()
+                util.handleResponse(res,null,{ok:true})
             }
+
         })
     }
 
