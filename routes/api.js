@@ -8,6 +8,7 @@ const good = require('../controllers/good');
 const store = require('../controllers/store');
 const personalinfo = require('../controllers/personalinfo');
 const login = require('../controllers/login');
+const category = require('../controllers/category');
 
 router.get('/user', user.getUser);
 
@@ -77,5 +78,9 @@ router.put('/store', store.addStore);
 router.delete('/store', store.deleteStore);
 
 router.get('/logout', login.logout);
+
+router.post('/order', personalinfo.addorder);
+
+router.get('/category', category.updateCategory);
 
 module.exports = router;
