@@ -14,19 +14,19 @@ module.exports = {
         let chatTo = await Chat.findOne({
             from: senderId,
             to: receiverId
-        });
+        }).lean().exec();
 
         let chatFrom = await Chat.findOne({
             from: receiverId,
             to: senderId
-        });
-        let chatcontent = new Array()
-        let chatfromcontent = new Array()
-        chatcontent = chatTo ? chatTo.contents : []
-        chatfromcontent = chatFrom ? chatFrom.contents : []
+        }).lean().exec();
+        let chatcontent = chatTo ? chatTo.contents : []
+        let chatfromcontent = chatFrom ? chatFrom.contents : []
         for (let ct in chatcontent) {
-            let time = util.formatDate(new Date(chatcontent[ct].time), "yyyy-MM-dd hh:mm:ss")
-            chatcontent[ct].time = time
+            if (chatcontent.hasOwnProperty(ct)){
+                let time = util.formatDate(new Date(chatcontent[ct].time), "yyyy-MM-dd hh:mm:ss")
+                chatcontent[ct].time = time
+            }
         }
         for (let cf in chatfromcontent) {
             let time = util.formatDate(new Date(chatfromcontent[cf].time), "yyyy-MM-dd hh:mm:ss")
@@ -51,12 +51,12 @@ module.exports = {
         let chatTo = await Chat.findOne({
             from: senderId,
             to: receiverId
-        });
+        }).lean().exec();
 
         let chatFrom = await Chat.findOne({
             from: receiverId,
             to: senderId
-        });
+        }).lean().exec();
         let chatcontent = new Array()
         let chatfromcontent = new Array()
         chatcontent = chatTo ? chatTo.contents : []
@@ -153,7 +153,7 @@ module.exports = {
         }
     },
     getChatByMerchant: async function (req, res, next) {
-        
+
         let toId = req.jwt.payload.merchantId;
         console.log(toId)
         let chat = await Chat.find({
