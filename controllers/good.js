@@ -101,7 +101,8 @@ module.exports = {
             options: good.options,
             description: good.description,
             imgUrls: good.images,
-            merchantId: good.merchantID
+            merchantId: good.merchantID,
+            rate: good.Rate.rate
         };
 
         util.handleResponse(res, null, good);

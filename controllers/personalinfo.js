@@ -87,7 +87,7 @@ module.exports = {
         let user=await User.findOne({_id:id})
         user.orderId.push(order._id)
         user.save()
-        handleResponse(res,null,{})
+        util.handleResponse(res,null,{})
     },
     getaddress: function (req, res, next) {
         let id = req.jwt.payload.userId;
@@ -206,7 +206,7 @@ module.exports = {
             if (err) {
                 util.handleResponse(res, err, {ok:false})
             } else {
-                
+
                 user.address.push({
                     province: province,
                     city: city,

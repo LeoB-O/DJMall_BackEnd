@@ -14,6 +14,7 @@ module.exports={
                 name:current.name,
                 imageUrl:current.images[0],
                 price:current.price,
+                rate: current.Rate.rate,
                 description:current.description
             }
         })
