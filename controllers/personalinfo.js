@@ -80,20 +80,14 @@ module.exports = {
             goods: goods
         })
     },
-    addorder: function(req,res,next){
+    addorder: async function(req,res,next){
         let goodids=req.body.goodids
         let id = req.jwt.payload.userId;
-        Order.create({goodIds:goodids,userId:id},function(err,order){
-            if(err)
-            {
-                util.handleResponse(res,err,{})
-            }
-            else
-            {
-                util.handleResponse(res,null,{})
-            }
-        })
-
+        let order=await Order.create({goodIds:goodids,userId:id})
+        let user=await User.findOne({_id:id})
+        user.orderId.push(order._id)
+        user.save()
+        handleResponse(res,null,{})
     },
     getaddress: function (req, res, next) {
         let id = req.jwt.payload.userId;
