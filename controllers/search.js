@@ -15,7 +15,8 @@ module.exports={
                 imageUrl:current.images[0],
                 price:current.price,
                 rate: current.Rate.rate,
-                description:current.description
+                description:current.description,
+                merchantID: current.merchantID
             }
         })
         util.handleResponse(res,null,{goods:goods})

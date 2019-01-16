@@ -7,7 +7,10 @@ module.exports = {
         let goods = await Good.find();
 
         goods = goods.slice(0, 5).map((current) => {
-            return current.images[0] || null;
+            return {
+                imageUrl: current.images[0] || null,
+                goodId: current.id
+            }
         });
 
         util.handleResponse(res, null, {imgUrls: goods});

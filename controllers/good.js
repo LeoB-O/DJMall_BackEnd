@@ -41,7 +41,8 @@ module.exports = {
                 options: current.options,
                 description: current.description,
                 imageUrl: current.images[0],
-                merchantID: current.merchantID
+                merchantID: current.merchantID,
+                rate: current.Rate.rate
             }
         });
 
@@ -63,7 +64,6 @@ module.exports = {
 
         let goods = util.findInArray(merchant.category, 'name', parentCate);
         goods = util.findInArray(goods.subCate, 'name', subCate).goodIds;
-        console.log(goods);
 
         //TODO try to convert to array.map
         let ret = [];
@@ -78,7 +78,8 @@ module.exports = {
                 options: good.options,
                 description: good.description,
                 imgUrls: good.images,
-                merchantID: good.merchantID
+                merchantID: good.merchantID,
+                rate: good.Rate.rate
             })
         }
         util.handleResponse(res, null, {goods: ret});
@@ -122,7 +123,6 @@ module.exports = {
         let pinyin = req.body.pinyin || '';
         let eName = req.body.eName || '';
         let merchantID = req.jwt.payload.merchantId || '';
-        console.log(merchantID);
 
         let good = await Good.create({
             name: name,
@@ -241,10 +241,16 @@ module.exports = {
         let subCateExist = false;
 
         for (let c in merchant.category) {
+            if (!merchant.category[c].name || merchant.category[c].name==undefined) {
+                continue;
+            }
             if (merchant.category[c].name == cateCate.cateName) {
                 parentCateExist = true;
             }
             for (let s in merchant.category[c].subCate) {
+                if (!merchant.category[c].subCate || merchant.category[c].subCate==undefined) {
+                    continue;
+                }
                 if (merchant.category[c].subCate[s].name == cateCate.subCate) {
                     subCateExist = true;
                     if (parentCateExist && subCateExist) {
@@ -253,6 +259,10 @@ module.exports = {
                 }
             }
             if (parentCateExist && !subCateExist) {
+                console.log('test'+ merchant.category[c].subCate)
+                if (merchant.category[c].subCate == undefined) {
+                    continue;
+                }
                 merchant.category[c].subCate.push({
                     name: cateCate.subCate,
                     goodIds: [good._id]
@@ -283,6 +293,7 @@ module.exports = {
             eName: eName,
             merchantID: merchantID
         });
+        console.log(goodCate)
 
         util.handleResponse(res, null, {});
     }

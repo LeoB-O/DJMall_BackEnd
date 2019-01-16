@@ -5,12 +5,12 @@ module.exports = {
     signup: async function (req, res, next) {
         let username = req.body.username
         let email = req.body.email
-        let password = req.body.email
+        let password = req.body.password
         let permission = req.body.permission
         if (permission == '1') {
             let merchant = await Mercant.create({
                 name: '',
-                category: []
+                category: [{name: 'init', subCate: {name: 'init sub', goodIds: []}}]
             })
 
             User.findOne().or([{
